@@ -1,32 +1,135 @@
-# Prerequisites
-*.d
+#include <bits/stdc++.h>
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+using namespace std;
 
-# Precompiled Headers
-*.gch
-*.pch
+const int CMAX = 105;
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
+struct scoala{
+    char nume[CMAX] , prenume[CMAX];
+    float medie;
+    struct{
+        int zi , luna , an;
+    }n;
+}v[CMAX];
 
-# Fortran module files
-*.mod
-*.smod
+void meniu()
+{
+    cout << "0.Iesire" << '\n';
+    cout << "1.Adaugarea unui elev in lista" << '\n';
+    cout << "2.Afisarea elevilor nascuti iarna" << '\n';
+    cout << "3.Ordonarea elevilor descrescator dupa medie" << '\n';
+    cout << "4.Afisarea elevilor care au cea mai mica medie" << '\n';
+    cout << "5.Eliminarea elevilor care au media cuprinsa in intervalul [a,b]" << '\n';
+    cout << "6.Afisarea tuturor elevilor" << '\n';
+}
 
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
+void adaugare(scoala v[],int &k)
+{
+    k++;
+    cout << "Nume: ";
+    cin >> v[k].nume;
+    cout << "Prenume: ";
+    cin >> v[k].prenume;
+    cout << "Data nasterii: " << '\n';
+    cout << "Zi: "; cin >> v[k].n.zi;
+    cout << "Luna: "; cin >> v[k].n.luna;
+    cout << "An: "; cin >> v[k].n.an;
+    cout << "Medie : "; cin >> v[k].medie;
+    cout << '\n';
+}
 
-# Executables
-*.exe
-*.out
-*.app
+void afis(scoala v[],int k)
+{
+    for(int i=1;i<=k;i++)
+        if(v[i].n.luna==12)
+        {
+            cout << "Nume: " << v[i].nume << " | Prenume: " << v[i].prenume << " | Data Nasterii: " << v[i].n.zi << "." << v[i].n.luna << "." << v[i].n.an << '\n' << '\n';
+        }
+}
+
+void afis2(scoala v[],int k)
+{
+    for(int i=1;i<=k;i++)
+            cout << "Nume: " << v[i].nume << " | Prenume: " << v[i].prenume << " | Data Nasterii: " << v[i].n.zi << "." << v[i].n.luna << "." << v[i].n.an << " | Medie : " << v[i].medie << '\n' << '\n';
+}
+void ordo(scoala v[],int k)
+{
+    for(int i=1;i<=k-1;i++)
+    {
+        for(int j=i+1;j<=k;j++)
+        {
+            if(v[i].medie<v[j].medie)
+            {
+                swap(v[i],v[j]);
+            }
+            else if(v[i].medie==v[j].medie)
+            {
+                if(strcmp(v[i].nume,v[j].nume)==(+1))
+                {
+                    swap(v[i],v[j]);
+                }
+            }
+        }
+    }
+    cout << '\n';
+}
+
+void mini(scoala v[],float mop,int k)
+{
+    for(int i=1;i<=k;i++)
+    {
+        if(v[i].medie<mop)
+        {
+            mop = v[i].medie;
+        }
+    }
+    for(int i=1;i<=k;i++)
+    {
+        if(v[i].medie==mop)
+            cout << "Nume: " << v[i].nume << " | Prenume: " << v[i].prenume << " | Data Nasterii: " << v[i].n.zi << "." << v[i].n.luna << "." << v[i].n.an << " | Medie : " << v[i].medie << '\n' << '\n';
+    }
+}
+
+void sterge(scoala v[],int &k,float a,float b)
+{
+    for(int i=1;i<=k;i++)
+    {
+        if(v[i].medie>=a&&v[i].medie<=b)
+        {
+            for(int j=i;j<=k-1;j++)
+            {
+                v[j] = v[j+1];
+            }
+            k--;
+            i--;
+        }
+    }
+}
+
+int main()
+{
+    int nr , k = 0 , a , b;
+    do{
+            meniu();
+            cout << '\n' << "Raspuns: ";
+            cin >> nr;
+            cout << '\n';
+            switch(nr){
+                case 0:
+                    cout << '\n' << "Multumim pentru folosirea programului " << '\n';
+                    break;
+                case 1: adaugare(v,k); break;
+                case 2: afis(v,k); break;
+                case 3: ordo(v,k); break;
+                case 4: mini(v,11,k); break;
+                case 5:
+                    cout << "a : "; cin >> a;
+                    cout << "b : "; cin >> b;
+                    cout << '\n';
+                    sterge(v,k,a,b);
+                    break;
+                case 6: afis2(v,k);
+            }
+    }while(nr!=0);
+    return 0;
+}
